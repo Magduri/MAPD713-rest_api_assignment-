@@ -100,6 +100,15 @@ server.del('/users/:id', function (req, res, next) {
 //Get API info
 server.get('/info', function (req, res, next) {
     countingAPI['/info']['GET'] += 1;
+
+    let info = {
+    name: SERVER_NAME,
+    port: PORT,
+    host: HOST,
+    status: 'Running',
+    usage: countingAPI 
+}; 
+
     
   console.log('GET / params=>' + JSON.stringify(req.params));
 
