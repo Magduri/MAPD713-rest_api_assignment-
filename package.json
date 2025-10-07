@@ -12,6 +12,6 @@
   "dependencies": {
     "restify": "^11.1.0",
     "restify-errors": "^8.0.2",
-    "save": "^2.9.0"
+    "save": "^2.4.0"
   }
 }

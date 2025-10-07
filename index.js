@@ -22,8 +22,17 @@ let restify = require('restify')
 server.use(restify.plugins.fullResponse());
 server.use(restify.plugins.bodyParser());
 
+
+let countingAPI = {
+    '/users': { 'GET': 0, 'POST': 0, 'DEL': 0 }, 
+    '/users/:id': { 'GET': 0, 'DEL': 0},
+    '/info': { 'GET': 0 }
+};
+
 //get all users
 server.get('/users', function (req, res, next) {
+    countingAPI['/users']['GET'] += 1;
+
   console.log('GET /users params=>' + JSON.stringify(req.params));
     usersSave.find({}, function (error, users) {
         res.send(users);
@@ -44,8 +53,10 @@ server.get('/users/:id', function (req, res, next) {
     })
 })
 
-//new user
+//create new user
 server.post('/users', function (req, res, next) {
+    countingAPI['/users']['POST'] += 1;
+
   console.log('POST /users params=>' + JSON.stringify(req.params));
   console.log('POST /users body=>' + JSON.stringify(req.body));
 
@@ -75,3 +86,23 @@ server.post('/users', function (req, res, next) {
     })
 })
 
+//Delete user by id
+server.del('/users/:id', function (req, res, next) {
+    countingAPI['/users']['DEL'] += 1;
+
+    console.log('POST/user params=>' + JSON.stringify(req.params));
+    usersSave.delete(req.params.id, function (error, user) {
+        if (error) return next(new Error(JSON.stringify(error.errors))) 
+        res.send(204);
+    })
+})
+
+//Get API info
+server.get('/info', function (req, res, next) {
+    countingAPI['/info']['GET'] += 1;
+    
+  console.log('GET / params=>' + JSON.stringify(req.params));
+
+    res.send(200, info);
+    return next();
+})
